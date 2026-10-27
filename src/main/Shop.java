@@ -304,6 +304,8 @@ public class Shop {
 
 	}
 
+	
+	
 	/**
 	 * Save the current inventory to items.txt.
 	 */
