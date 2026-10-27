@@ -245,6 +245,8 @@ public class Shop {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	/**
 	 * Convert a valid line from items.txt into a Product.
@@ -289,6 +291,7 @@ public class Shop {
 				return null;
 			}
 		}
+		
 
 		if (name == null || name.isEmpty() || price == null || stock == null) {
 			return null;
