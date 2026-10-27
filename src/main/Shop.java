@@ -328,8 +328,54 @@ public class Shop {
 	 * add a new product to inventory getting data from console
 	 */
 	public void addProduct() {
-		// TODO RA1-ISSUE-06: demanar dades minimes, crear un Product i afegir-lo a inventory.
-		System.out.println("RA1-ISSUE-06 pendent: encara no es poden afegir articles.");
+		if (isInventoryFull()) {
+			System.out.println("No es poden afegir més articles, s'ha assolit el màxim.");
+			return;
+		}
+
+		Scanner scanner = CONSOLE;
+
+		// el menú fa servir nextInt(), així que pot quedar un salt de línia pendent
+		System.out.print("Nom de l'article: ");
+		String name = scanner.nextLine().trim();
+		if (name.isEmpty()) {
+			name = scanner.nextLine().trim();
+		}
+
+		// validacions de dades mínimes
+		if (name.isEmpty()) {
+			System.out.println("El nom no pot estar buit. No s'afegeix l'article.");
+			return;
+		}
+		if (name.contains(";") || name.contains(":")) {
+			System.out.println("El nom no pot contenir ';' ni ':'. No s'afegeix l'article.");
+			return;
+		}
+		if (findProduct(name) != null) {
+			System.out.println("Ja existeix un article amb aquest nom. No s'afegeix l'article.");
+			return;
+		}
+
+		double wholesalerPrice;
+		int stock;
+		try {
+			System.out.print("Preu: ");
+			wholesalerPrice = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
+			System.out.print("Estoc: ");
+			stock = Integer.parseInt(scanner.nextLine().trim());
+		} catch (NumberFormatException e) {
+			System.out.println("El preu o l'estoc no són numèrics. No s'afegeix l'article.");
+			return;
+		}
+
+		if (wholesalerPrice <= 0 || stock < 0) {
+			System.out.println("El preu ha de ser positiu i l'estoc no pot ser negatiu. No s'afegeix l'article.");
+			return;
+		}
+
+		Product product = new Product(name, new Amount(wholesalerPrice), stock > 0, stock);
+		addProduct(product);
+		System.out.println("Article afegit: " + product);
 	}
 
 	/**
