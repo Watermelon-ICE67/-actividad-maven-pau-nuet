@@ -224,10 +224,21 @@ public class Shop {
 
 		try (BufferedReader bf = new BufferedReader(new FileReader(f))) {
 			String line;
+			int lineNumber = 0;
 			while ((line = bf.readLine()) != null) {
-				// RA1-ISSUE-03: de moment només es llegeix la línia com a text.
-				// TODO RA1-ISSUE-04: delegar la conversió a parseProductLine(line).
-				System.out.println("Línia llegida: " + line);
+				lineNumber++;
+
+				// les línies en blanc s'ignoren sense avisar (no són dades)
+				if (line.isBlank()) {
+					continue;
+				}
+
+				Product product = parseProductLine(line);
+				if (product != null) {
+					addProduct(product);
+				} else {
+					System.out.println("Aviso: la línia " + lineNumber + " d'items.txt no és vàlida i s'ignora: " + line);
+				}
 			}
 		} catch (IOException e) {
 			// TODO RA1-ISSUE-11: missatge comprensible per fitxer absent o error de lectura.
@@ -237,11 +248,60 @@ public class Shop {
 
 	/**
 	 * Convert a valid line from items.txt into a Product.
+	 * * Format: Item:<nom>;Wholesaler Price:<preu>;Stock:<estoc>;
+	 * 
+	 * @return the Product, or null if the line is not valid
 	 */
 	private Product parseProductLine(String line) {
-		// TODO RA1-ISSUE-04: validar camps, convertir preu i estoc, i retornar un Product.
-		// TODO RA1-ISSUE-05: decidir com es tracten les linies mal formades.
-		return null;
+		if (line == null || line.isBlank()) {
+			return null;
+		}
+
+		String name = null;
+		Double price = null;
+		Integer stock = null;
+
+		// separa camps (;) i, dins de cada camp, clau:valor
+		for (String field : line.split(";")) {
+			String[] keyValue = field.split(":", 2);
+			if (keyValue.length != 2) {
+				continue;
+			}
+			String key = keyValue[0].trim();
+			String value = keyValue[1].trim();
+
+			try {
+				switch (key) {
+				case "Item":
+					name = value;
+					break;
+				case "Wholesaler Price":
+					price = Double.parseDouble(value);
+					break;
+				case "Stock":
+					stock = Integer.parseInt(value);
+					break;
+				default:
+					break;
+				}
+			} catch (NumberFormatException e) {
+				// valor numèric no vàlid: la línia no genera Product
+				return null;
+			}
+		}
+
+		if (name == null || name.isEmpty() || price == null || stock == null) {
+			return null;
+		}
+		if (name == null || name.isEmpty() || price == null || stock == null) {
+			return null;
+		}
+		if (price < 0 || stock < 0) {
+			return null;
+		}
+
+		return new Product(name, new Amount(price), stock > 0, stock);
+
 	}
 
 	/**
