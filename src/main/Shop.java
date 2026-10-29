@@ -332,7 +332,7 @@ public class Shop {
 			System.out.println("No es poden afegir més articles, s'ha assolit el màxim.");
 			return;
 		}
-
+		
 		Scanner scanner = CONSOLE;
 
 		// el menú fa servir nextInt(), així que pot quedar un salt de línia pendent
@@ -359,7 +359,7 @@ public class Shop {
 		double wholesalerPrice;
 		int stock;
 		try {
-			System.out.print("Preu: ");
+			System.out.print("Preu Majorista: ");
 			wholesalerPrice = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
 			System.out.print("Estoc: ");
 			stock = Integer.parseInt(scanner.nextLine().trim());
@@ -390,9 +390,45 @@ public class Shop {
 	 * add stock for a specific product
 	 */
 	public void addStock() {
-		// TODO RA1-ISSUE-07: trobar un Product i actualitzar el seu estoc.
-		System.out.println("RA1-ISSUE-07 pendent: encara no es pot modificar l'estoc.");
+		Scanner scanner = CONSOLE;
+		
+		System.out.print("Seleccioneu un nom d'article: ");
+		String name = scanner.nextLine().trim();
+		if(name.isEmpty()); {
+			name = scanner.nextLine().trim();
+		}
+		
+		Product product =findProduct(name);
+		if (product == null) {
+			System.out.println("No s'ha trobat l'article amb nom " + name);
+			return;
+		}
+		
+		int quantity;
+		try {
+			System.out.print("Seleccioneu la quantitat a afegir: ");
+			quantity = Integer.parseInt(scanner.nextLine().trim());
+			
+		} catch (NumberFormatException e) {
+			System.out.println("La quantitat no es numèrica. No es canvia l'estoc.");
+			return;
+		}
+		
+		if (quantity <= 0) {
+			System.out.println("La quantitat ha de ser positiva. No es canvia l'estoc.");
+			return;
+		}
+		
+		//nomes canvia l'estoc.
+		product.setStock(product.getStock() + quantity);
+		
+		// si el producte estava esgotat, torna a estar disponible.
+		product.setAvailable(true);
+		
+		System.out.println("L¿estoc de l'article " + name + "s'ha actualitzat a " + product.getStock());
+	
 	}
+	  
 
 	/**
 	 * set a product as expired
