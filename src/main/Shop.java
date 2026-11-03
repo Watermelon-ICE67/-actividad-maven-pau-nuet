@@ -241,9 +241,11 @@ public class Shop {
 					System.out.println("Aviso: la línia " + lineNumber + " d'items.txt no és vàlida i s'ignora: " + line);
 				}
 			}
+		} catch (FileNotFoundException e) {
+			System.out.println("No s'ha trobat el fitxer d'inventari: " + f.getPath());
+			System.out.println("L'inventari començarà buit. Comprova que existeix files/" + ITEMS_FILE + ".");
 		} catch (IOException e) {
-			// TODO RA1-ISSUE-11: missatge comprensible per fitxer absent o error de lectura.
-			e.printStackTrace();
+			System.out.println("No s'ha pogut llegir el fitxer d'inventari: " + e.getMessage());
 		}
 	}
 	

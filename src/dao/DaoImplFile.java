@@ -23,6 +23,8 @@ public class DaoImplFile implements Dao {
 	@Override
 	public Employee getEmployee(int employeeId, String password) {
 		if (usersFile == null || !usersFile.exists()) {
+			System.out.println("No s'ha trobat el fitxer d'usuaris: " + usersFile);
+			System.out.println("Comprova que existeix files/users.txt a l'arrel del projecte.");
 			return null;
 		}
 
