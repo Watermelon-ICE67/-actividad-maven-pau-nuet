@@ -70,13 +70,21 @@ Aquest projecte no utilitza JDBC, SQL, ORM, MongoDB, serveis externs ni bases de
 ## Proves RA1
 
 | Issue | Cas provat | Resultat observat |
-|---|---|---|
+
 | ISSUE-02 | Rutes de `files/items.txt` i `files/users.txt` | Ruta relativa (`user.dir` + `files/`), sense rutes absolutes; fitxers a l'arrel del projecte |
+
 | ISSUE-03 | Lectura de `files/items.txt` línia a línia amb `BufferedReader` i try-with-resources | Les línies es llegeixen com a text i el fitxer es tanca automàticament |
+
 | ISSUE-04 | Línia vàlida `Item:SSD 1TB;Wholesaler Price:60.00;Stock:8;` | Es crea un `Product` amb nom, preu majorista 60.00 i estoc 8 |
+
 | ISSUE-05 | Línia mal formada `Item:Ratoli;Wholesaler Price:abc;Stock:5;` | Avís amb el número de línia; l'aplicació continua i carrega els altres productes |
+
 | ISSUE-06 | Afegir `Ratoli gaming`, preu 25.50, estoc 7 (opció 2) | Apareix a l'opció 5 durant la mateixa execució, sense reiniciar |
+
 | ISSUE-07 | Sumar 5 a l'estoc de `SSD 1TB` (opció 3) | L'estoc passa de 8 a 13; nom i preus sense canvis |
+
 | ISSUE-08 | Eliminar `Teclat mecanic` (opció 4) | Ja no apareix a l'opció 5; la resta de productes continuen accessibles |
+
 | ISSUE-09 | Desar l'inventari (opció 10) | `files/items.txt` conté l'inventari actualitzat en el mateix format de línia |
+
 | ISSUE-10 | Afegir `Pantalla OLED` (75.00, estoc 10), desar i reiniciar | Després del reinici, l'opció 5 mostra `Pantalla OLED`: el canvi persisteix |
