@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Locale;
 
 public class Shop {
 	private static final Scanner CONSOLE = new Scanner(System.in);
@@ -313,8 +314,22 @@ public class Shop {
 	 * Save the current inventory to items.txt.
 	 */
 	public void saveInventory() {
-		// TODO RA1-ISSUE-09: convertir cada Product en una linia i reescriure items.txt.
-		System.out.println("RA1-ISSUE-09 pendent: encara no s'ha desat l'inventari.");
+		File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + ITEMS_FILE);
+
+		// FileWriter sense "true": reescriu el fitxer sencer amb l'inventari actual
+		try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
+			for (Product product : inventory) {
+				// mateix format que llegeix parseProductLine:
+				// Item:<nom>;Wholesaler Price:<preu>;Stock:<estoc>;
+				pw.println("Item:" + product.getName()
+						+ ";Wholesaler Price:" + String.format(Locale.US, "%.2f", product.getWholesalerPrice().getValue())
+						+ ";Stock:" + product.getStock() + ";");
+			}
+			System.out.println("Inventari desat a " + ITEMS_FILE + " (" + inventory.size() + " productes).");
+		} catch (IOException e) {
+			// TODO RA1-ISSUE-11: missatge més detallat per errors d'escriptura.
+			System.out.println("No s'ha pogut desar l'inventari: " + e.getMessage());
+		}
 	}
 
 	/**
